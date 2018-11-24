@@ -23,7 +23,7 @@ fileObj = codecs.open("proj2.rtf","w","UTF")
 html = requests.get("https://www.ecommercetimes.com/story/52616.html")
 soup = BeautifulSoup(html.text,'html5lib')
 
-'''
+
 #part3
 all_paras = soup.find_all('p')
 
@@ -39,7 +39,22 @@ print "Three sentence summary"
 for sent in article_sum['top_n_summary']:
 	print removeUnicode(sent)
 
-'''
+#part4
+print "--------------------"
+print "Bigrams:"
+asc_2018 = removeUnicode(data_2018)
+bigWords = nltk.tokenize.word_tokenize(asc_2018)
+N = 25
+search = nltk.BigramCollocationFinder.from_words(bigWords)
+search.apply_freq_filter(2)
+search.apply_word_filter(lambda skips: skips in nltk.corpus.stopwords.words('English'))
+
+from nltk import BigramAssocMeasures
+idxJaccard = BigramAssocMeasures.jaccard
+bigrams = search.nbest(idxJaccard,N)
+
+for bigram in bigrams:
+	print str(bigram[0]).encode('utf-8')," ", str(bigram[1]).encode('utf-8')
 
 	
 	
